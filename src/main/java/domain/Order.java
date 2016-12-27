@@ -26,7 +26,7 @@ public class Order
     private double price;
     private Date date;
 
-    private List<Order> orders = new ArrayList<Order>();
+    private List<Waffle> waffles = new ArrayList<Waffle>();
 
     public Order(Date date, double price) {
         this.date = date;
@@ -61,11 +61,11 @@ public class Order
     }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    public List<Order> getOrders() {
-        return orders;
+    public List<Waffle> getWaffles() {
+        return waffles;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setWaffles(List<Waffle> waffles) {
+        this.waffles = waffles;
     }
 }
