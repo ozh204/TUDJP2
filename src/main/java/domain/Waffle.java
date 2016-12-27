@@ -8,7 +8,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 @Entity
-@NamedQueries({
+@NamedQueries(value = {
         @NamedQuery(name = "waffle.noSugar", query = "Select w from Waffle w where w.sugar = 'Nie'")
 })
 public class Waffle {
@@ -20,6 +20,7 @@ public class Waffle {
     private String sugar;
     private String cream;
     private String fruit;
+    private Boolean sold = false;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -77,5 +78,13 @@ public class Waffle {
 
     public void setFruit(String fruit) {
         this.fruit = fruit;
+    }
+
+    public Boolean getSold() {
+        return sold;
+    }
+
+    public void setSold(Boolean sold) {
+        this.sold = sold;
     }
 }

@@ -16,9 +16,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 @Entity
-@NamedQueries({
+@NamedQueries(value = {
         @NamedQuery(name = "order.all", query = "Select o from Order o"),
-        @NamedQuery(name = "order.byId", query = "Select o from \"Order\" o where o.id = :id")
+        @NamedQuery(name = "order.byId", query = "Select o from Order o where o.id = :id")
 })
 public class Order
 {
