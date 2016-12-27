@@ -23,14 +23,16 @@ import javax.persistence.OneToMany;
 public class Order
 {
     private Integer id;
-    private double price;
+    private double price = 0.0;
     private Date date;
+    private Boolean sold = false;
 
+    Date now = new Date();
     private List<Waffle> waffles = new ArrayList<Waffle>();
 
-    public Order(Date date, double price) {
-        this.date = date;
-        this.price = price;
+    public Order() {
+        super();
+        date = now;
     }
 
     @Id
@@ -67,5 +69,13 @@ public class Order
 
     public void setWaffles(List<Waffle> waffles) {
         this.waffles = waffles;
+    }
+
+    public Boolean getSold() {
+        return sold;
+    }
+
+    public void setSold(Boolean sold) {
+        this.sold = sold;
     }
 }

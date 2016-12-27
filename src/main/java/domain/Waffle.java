@@ -9,18 +9,18 @@ import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQueries(value = {
-        @NamedQuery(name = "waffle.noSugar", query = "Select w from Waffle w where w.sugar = 'Nie'")
+        @NamedQuery(name = "waffle.noSugar", query = "Select w from Waffle w where w.sugar = 'Nie'"),
+        @NamedQuery(name = "waffle.all", query = "Select w from Waffle w")
 })
 public class Waffle {
 
     private Long id;
-    private String type;
-    private double price;
-    private String topping;
-    private String sugar;
-    private String cream;
-    private String fruit;
-    private Boolean sold = false;
+    private String type = "Suchy";
+    private double price = 3.5;
+    private String topping = "Brak";
+    private String sugar = "Nie";
+    private String cream = "Nie";
+    private String fruit = "Brak";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -78,13 +78,5 @@ public class Waffle {
 
     public void setFruit(String fruit) {
         this.fruit = fruit;
-    }
-
-    public Boolean getSold() {
-        return sold;
-    }
-
-    public void setSold(Boolean sold) {
-        this.sold = sold;
     }
 }
