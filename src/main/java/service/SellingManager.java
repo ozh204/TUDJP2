@@ -11,4 +11,7 @@ public interface SellingManager {
     void deleteOrder(Order order);
     List<Order> getAllOrders();
 
+    void addWaffle(Waffle waffle);
+    void deleteWaffle(Waffle waffle);
+    List<Waffle> getAllWaffles();
 }

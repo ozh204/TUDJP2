@@ -48,4 +48,23 @@ public class SellingManagerHibernate implements SellingManager {
     public List<Order> getAllOrders() {
         return sessionFactory.getCurrentSession().getNamedQuery("order.all").list();
     }
+
+    @Override
+    public void addWaffle(Waffle waffle) {
+        waffle.setId(null);
+        sessionFactory.getCurrentSession().persist(waffle);
+    }
+
+    @Override
+    public void deleteWaffle(Waffle waffle) {
+
+        waffle = (Waffle) sessionFactory.getCurrentSession().get(Waffle.class, waffle.getId());
+        sessionFactory.getCurrentSession().delete(waffle);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Waffle> getAllWaffles() {
+        return sessionFactory.getCurrentSession().getNamedQuery("waffle.all").list();
+    }
 }

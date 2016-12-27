@@ -8,10 +8,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 @Entity
-@NamedQueries(value = {
-        @NamedQuery(name = "waffle.noSugar", query = "Select w from Waffle w where w.sugar = 'Nie'"),
-        @NamedQuery(name = "waffle.all", query = "Select w from Waffle w")
-})
+@NamedQuery(name = "waffle.all", query = "Select w from Waffle w")
 public class Waffle {
 
     private Long id;
