@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import domain.Waffle;
 import domain.Orders;
 
+@SuppressWarnings("ALL")
 @Component
 @Transactional
 public class SellingManagerHibernate implements SellingManager {
@@ -17,18 +18,29 @@ public class SellingManagerHibernate implements SellingManager {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+//    public SessionFactory getSessionFactory() {
+//        return sessionFactory;
+//    }
+//
+//    public void setSessionFactory(SessionFactory sessionFactory) {
+//        this.sessionFactory = sessionFactory;
+//    }
 
     @Override
-    public void addWaffle(Waffle waffle) {
-		waffle.setId(null);
+    public void addWaffle(Waffle waffle, Orders order) {
+
+        waffle.setId(null);
         sessionFactory.getCurrentSession().persist(waffle);
+
+        double price = order.getPrice();
+        System.out.println("################" + price + "#################");
+        price += waffle.getPrice();
+        System.out.println("################"+price+"#################");
+
+        order.setPrice(price);
+
+        order.getWaffles().add(waffle);
+
     }
 
     @Override
@@ -36,33 +48,50 @@ public class SellingManagerHibernate implements SellingManager {
 
         waffle = (Waffle) sessionFactory.getCurrentSession().get(Waffle.class, waffle.getId());
         sessionFactory.getCurrentSession().delete(waffle);
+
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Waffle> getAllWaffles() {
+
         return sessionFactory.getCurrentSession().getNamedQuery("waffle.all").list();
+
     }
     
     @Override
     public void addOrder(Orders order) {
+
 		order.setId(null);
         sessionFactory.getCurrentSession().persist(order);
+
     }
 
     @Override
     public void deleteOrder(Orders order) {
+
         order = (Orders) sessionFactory.getCurrentSession().get(Orders.class, order.getId());
 
         order.setSold(false);
         sessionFactory.getCurrentSession().update(order);
 
         sessionFactory.getCurrentSession().delete(order);
+
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Orders> getAllOrders() {
         return sessionFactory.getCurrentSession().getNamedQuery("order.all").list();
+    }
+
+    @Override
+    public Waffle findWaffleById(Long id) {
+        return (Waffle) sessionFactory.getCurrentSession().getNamedQuery("waffle.byId").setString("id", id.toString()).uniqueResult();
+    }
+
+    @Override
+    public Orders findOrderById(Long id) {
+        return (Orders) sessionFactory.getCurrentSession().getNamedQuery("order.byId").setString("id", id.toString()).uniqueResult();
     }
 }

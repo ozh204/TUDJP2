@@ -1,17 +1,15 @@
 package domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
+import javax.persistence.*;
 
 @Entity
-@NamedQuery(name = "waffle.all", query = "Select w from Waffle w")
+@NamedQueries({
+        @NamedQuery(name = "waffle.all", query = "Select w from Waffle w"),
+        @NamedQuery(name = "waffle.byId", query = "Select w from Waffle w where w.id = :id")
+})
 public class Waffle {
 
     private Long id;
-    private String type = "Suchy";
     private double price = 3.5;
     private String topping = "Brak";
     private String sugar = "Nie";
@@ -28,14 +26,6 @@ public class Waffle {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public double getPrice() {
         return price;
     }
@@ -49,14 +39,32 @@ public class Waffle {
     }
 
     public void setTopping(String topping) {
+
+        if( (!topping.equals("Brak")) || (this.topping.equals("Brak"))) {
+            this.price += 1.5;
+        }
+        if( (topping.equals("Brak")) || (!this.topping.equals("Brak"))) {
+            this.price -= 1.5;
+        }
+
         this.topping = topping;
+
     }
 
     public String getSugar() {
+
         return sugar;
     }
 
     public void setSugar(String sugar) {
+
+        if( (!sugar.equals("Nie")) || (this.sugar.equals("Nie"))) {
+            this.price += 0.5;
+        }
+        if( (sugar.equals("Nie")) || (!this.sugar.equals("Nie"))) {
+            this.price -= 0.5;
+        }
+
         this.sugar = sugar;
     }
 
@@ -65,6 +73,14 @@ public class Waffle {
     }
 
     public void setCream(String cream) {
+
+        if( (!cream.equals("Nie")) || (this.cream.equals("Nie"))) {
+            this.price += 2.5;
+        }
+        if( (cream.equals("Nie")) || (!this.cream.equals("Nie"))) {
+            this.price -= 2.5;
+        }
+
         this.cream = cream;
     }
 
@@ -73,6 +89,14 @@ public class Waffle {
     }
 
     public void setFruit(String fruit) {
+
+        if( (!fruit.equals("Brak")) || (this.fruit.equals("Brak"))) {
+            this.price += 3.5;
+        }
+        if( (fruit.equals("Brak")) || (!this.fruit.equals("Brak"))) {
+            this.price -= 3.5;
+        }
+
         this.fruit = fruit;
     }
 }
