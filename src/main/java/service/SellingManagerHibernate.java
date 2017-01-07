@@ -33,9 +33,7 @@ public class SellingManagerHibernate implements SellingManager {
         sessionFactory.getCurrentSession().persist(waffle);
 
         double price = order.getPrice();
-        System.out.println("################" + price + "#################");
         price += waffle.getPrice();
-        System.out.println("################"+price+"#################");
 
         order.setPrice(price);
 
@@ -43,12 +41,26 @@ public class SellingManagerHibernate implements SellingManager {
 
     }
 
+//    @Override
+//    public void deleteWaffle(Long id) {
+//
+//        Waffle waffle = (Waffle) sessionFactory.getCurrentSession().get(Waffle.class, id);
+//        sessionFactory.getCurrentSession().delete(waffle);
+//
+//    }
+
     @Override
     public void deleteWaffle(Waffle waffle) {
 
         waffle = (Waffle) sessionFactory.getCurrentSession().get(Waffle.class, waffle.getId());
         sessionFactory.getCurrentSession().delete(waffle);
 
+    }
+
+    @Override
+    public void modifyWaffle(Waffle waffle) {
+
+        sessionFactory.getCurrentSession().update(waffle);
     }
 
     @Override
@@ -71,10 +83,6 @@ public class SellingManagerHibernate implements SellingManager {
     public void deleteOrder(Orders order) {
 
         order = (Orders) sessionFactory.getCurrentSession().get(Orders.class, order.getId());
-
-        order.setSold(false);
-        sessionFactory.getCurrentSession().update(order);
-
         sessionFactory.getCurrentSession().delete(order);
 
     }

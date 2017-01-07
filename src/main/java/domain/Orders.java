@@ -1,6 +1,12 @@
 package domain;
 
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
