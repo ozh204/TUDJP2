@@ -53,8 +53,10 @@ public class SellingManagerHibernate implements SellingManager {
     public void deleteWaffle(Waffle waffle) {
 
         waffle = (Waffle) sessionFactory.getCurrentSession().get(Waffle.class, waffle.getId());
-        sessionFactory.getCurrentSession().delete(waffle);
 
+        Orders order = (Orders) sessionFactory.getCurrentSession().getNamedQuery("order.byWaffle").setString("id", waffle.getId().toString()).uniqueResult();
+        order.getWaffles().remove(waffle);
+        sessionFactory.getCurrentSession().saveOrUpdate(waffle);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package domain;
 
-import org.hibernate.annotations.*;
-
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,7 +12,8 @@ import java.util.List;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "order.all", query = "Select o from Orders o"),
-        @NamedQuery(name = "order.byId", query = "Select o from Orders o where o.id = :id")
+        @NamedQuery(name = "order.byId", query = "Select o from Orders o where o.id = :id"),
+        @NamedQuery(name = "order.byWaffle", query = "Select o from Orders o INNER JOIN Waffle w WHERE o.id = :id")
 })
 public class Orders {
 	

@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import domain.Waffle;
 import domain.Orders;
 
+import javax.persistence.criteria.Order;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
@@ -67,7 +69,7 @@ public class SellingManagerTest {
     // Dodanie nowego gofra (w sumie 3)
     // 3 gofr do 1 zamówienia
     @Test
-    public void addWaffleTest() {
+    public void addWaffle() {
 
         Integer howManyWaffles = sellingManager.getAllWaffles().size();
 
@@ -130,22 +132,36 @@ public class SellingManagerTest {
         assertEquals(waffle2.getCream(), newCream);
         assertNotSame(waffle2.getCream(), oldCream);
 
-        assertEquals(waffle2.getId().intValue(), oldId.intValue());
+        assertEquals(waffle2.getId(), oldId);
+    }
+
+    @Test
+    public void deleteWaffle() {
+
+        Long id = addedWaffleIds.get(1);
+        Waffle waffle = sellingManager.findWaffleById(id);
+        Integer howManyWaffles = sellingManager.getAllWaffles().size();
+
+        sellingManager.deleteWaffle(waffle);
+        addedWaffleIds.remove(1);
+
+        assertEquals(howManyWaffles-1,sellingManager.getAllWaffles().size());
+        assertEquals(sellingManager.findWaffleById(id), null);
     }
 
     @After
     public void endTests() {
 
-//        for(Long id : addedOrderIds) {
-//
-//            Orders order = sellingManager.findOrderById(id);
-//            sellingManager.deleteOrder(order);
-//        }
+        for(Long id : addedOrderIds) {
 
-        for(Long id : addedWaffleIds) {
-
-            Waffle waffle = sellingManager.findWaffleById(id);
-            sellingManager.deleteWaffle(waffle);
+            Orders order = sellingManager.findOrderById(id);
+            sellingManager.deleteOrder(order);
         }
+
+//        for(Long id : addedWaffleIds) {
+//
+//            Waffle waffle = sellingManager.findWaffleById(id);
+//            sellingManager.deleteWaffle(waffle);
+//        }
     }
 }

@@ -1,6 +1,7 @@
 package domain;
 
 import javax.persistence.*;
+import javax.persistence.criteria.Order;
 
 @Entity
 @NamedQueries({
@@ -99,4 +100,7 @@ public class Waffle {
 
         this.fruit = fruit;
     }
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    public Orders order;
 }
