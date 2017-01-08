@@ -19,4 +19,6 @@ public interface SellingManager {
     List<Orders> getAllOrders();
     Orders findOrderById(Long id);
 
+    //void ktory(String co);
+
 }

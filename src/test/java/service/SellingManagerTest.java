@@ -3,9 +3,7 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -15,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import domain.Waffle;
 import domain.Orders;
-
-import javax.persistence.criteria.Order;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
@@ -33,12 +29,16 @@ public class SellingManagerTest {
     private List<Long> addedWaffleIds = new ArrayList<Long>();
     private List<Long> addedOrderIds = new ArrayList<Long>();
 
+    //private static boolean initializeDone = false;
+
     // Dodanie dwóch gofrów i dwóch zamówień
     // 1 gofr do 1 zamówienia
     // 2 gofr do 2 zamówienia
     @Before
     public void initialize() {
 
+        //if(initializeDone) return;
+//sellingManager.ktory("init");
         assertEquals(addedWaffleIds.size(), 0);
         Integer howManyWaffles = sellingManager.getAllWaffles().size();
 
@@ -64,18 +64,22 @@ public class SellingManagerTest {
 
         assertEquals(addedWaffleIds.size(), 2);
         assertEquals(howManyWaffles + 2, sellingManager.getAllWaffles().size());
+
+        //initializeDone = true;
+//sellingManager.ktory("init");
     }
 
     // Dodanie nowego gofra (w sumie 3)
     // 3 gofr do 1 zamówienia
     @Test
     public void addWaffle() {
-
+//sellingManager.ktory("add");
         Integer howManyWaffles = sellingManager.getAllWaffles().size();
 
         Waffle waffle = new Waffle();
         Orders order = sellingManager.findOrderById(addedOrderIds.get(0));
 
+        // czy pierwsze zamówienie ma jednego gofra
         assertEquals(order.getWaffles().size(), 1);
 
         waffle.setCream("Tak");
@@ -87,13 +91,16 @@ public class SellingManagerTest {
 
         assertEquals(order.getWaffles().size(), 2);
         assertEquals(howManyWaffles + 1, sellingManager.getAllWaffles().size());
+//sellingManager.ktory("add");
     }
 
     // Modyfikacja pierwszego gofra z testów
     @Test
     public void modifyWaffle() {
+//sellingManager.ktory("mod");
+        Long first = addedWaffleIds.get(0);
 
-        Waffle waffle = sellingManager.findWaffleById(addedWaffleIds.get(0));
+        Waffle waffle = sellingManager.findWaffleById(first);
 
         Long oldId = waffle.getId();
         double oldPrice = waffle.getPrice();
@@ -115,7 +122,7 @@ public class SellingManagerTest {
 
         sellingManager.modifyWaffle(waffle);
 
-        Waffle waffle2 = sellingManager.findWaffleById(addedWaffleIds.get(0));
+        Waffle waffle2 = sellingManager.findWaffleById(first);
 
         assertEquals(waffle2.getTopping(), newTopping);
         assertNotSame(waffle2.getTopping(), oldTopping);
@@ -133,12 +140,16 @@ public class SellingManagerTest {
         assertNotSame(waffle2.getCream(), oldCream);
 
         assertEquals(waffle2.getId(), oldId);
+//sellingManager.ktory("mod");
     }
 
+    // Usuwanie drugiego testowego gofra
     @Test
     public void deleteWaffle() {
+        //sellingManager.ktory("del");
 
         Long id = addedWaffleIds.get(1);
+
         Waffle waffle = sellingManager.findWaffleById(id);
         Integer howManyWaffles = sellingManager.getAllWaffles().size();
 
@@ -147,6 +158,32 @@ public class SellingManagerTest {
 
         assertEquals(howManyWaffles-1,sellingManager.getAllWaffles().size());
         assertEquals(sellingManager.findWaffleById(id), null);
+        //sellingManager.ktory("del");
+
+    }
+
+    // Dodanie trzeciego zamówienia
+    @Test
+    public void addOrder() {
+
+        Integer howManyOrders = sellingManager.getAllOrders().size();
+
+        Orders order = new Orders();
+
+        // czy jest bez gofrów
+        assertEquals(order.getWaffles().size(), 0);
+
+        order.setSold(true);
+        // dodanie nowego gofra
+        Waffle waffle = new Waffle();
+        waffle.setCream("Tak");
+        order.getWaffles().add(waffle);
+
+        sellingManager.addOrder(order);
+        addedOrderIds.add(order.getId());
+
+        assertEquals(order.getWaffles().size(), 1);
+        assertEquals(howManyOrders + 1, sellingManager.getAllOrders().size());
     }
 
     @After
@@ -158,10 +195,5 @@ public class SellingManagerTest {
             sellingManager.deleteOrder(order);
         }
 
-//        for(Long id : addedWaffleIds) {
-//
-//            Waffle waffle = sellingManager.findWaffleById(id);
-//            sellingManager.deleteWaffle(waffle);
-//        }
     }
 }

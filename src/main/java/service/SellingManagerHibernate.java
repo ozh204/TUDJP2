@@ -33,40 +33,47 @@ public class SellingManagerHibernate implements SellingManager {
 
         double price = order.getPrice();
         price += waffle.getPrice();
-
         order.setPrice(price);
 
         order.getWaffles().add(waffle);
-
     }
-
-//    @Override
-//    public void deleteWaffle(Long id) {
-//
-//        Waffle waffle = (Waffle) sessionFactory.getCurrentSession().get(Waffle.class, id);
-//        sessionFactory.getCurrentSession().delete(waffle);
-//
-//    }
 
     @Override
     public void deleteWaffle(Waffle waffle) {
 
-        waffle = (Waffle) sessionFactory.getCurrentSession().get(Waffle.class, waffle.getId());
+        Orders order = (Orders) sessionFactory.getCurrentSession().getNamedQuery("order.byWaffle").setString("id", waffle.getId().toString()).uniqueResult();
 
-        //Orders order = (Orders) sessionFactory.getCurrentSession().getNamedQuery("order.byWaffle").setString("id", waffle.getId().toString()).uniqueResult();
-        //order = (Orders) sessionFactory.getCurrentSession().get(Orders.class, order.getId());
-
-        //System.out.println("###################"+order.getId()+"####################3");
-        //order.getWaffles().remove(waffle);
+        order.getWaffles().remove(waffle);
         sessionFactory.getCurrentSession().delete(waffle);
-        sessionFactory.getCurrentSession().saveOrUpdate(waffle);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void modifyWaffle(Waffle waffle) {
 
+        waffle = (Waffle) sessionFactory.getCurrentSession().get(Waffle.class, waffle.getId());
         sessionFactory.getCurrentSession().update(waffle);
+
+        // Ustawić nową cenę zamówienia, w którym został zmieniony gofr
+        Orders order = (Orders) sessionFactory.getCurrentSession().getNamedQuery("order.byWaffle").setString("id", waffle.getId().toString()).uniqueResult();
+        List<Waffle> waffles = sessionFactory.getCurrentSession().getNamedQuery("order.allWaffles").setString("id", order.getId().toString()).list();
+
+        double price = 0;
+        for(Waffle waffle2 : waffles) {
+            price += waffle2.getPrice();
+        }
+        order.setPrice(price);
+        sessionFactory.getCurrentSession().update(order);
     }
+
+//    public void ktory(String co) {
+//        List<Waffle> waffles = getAllWaffles();
+//        System.out.println("###############" + co);
+//        for (Waffle waffle : waffles) {
+//            System.out.println("###############" + waffle.getId() + "---" + waffle.getPrice() + "#####################");
+//        }
+//        System.out.println("###############"+co);
+//    }
 
     @Override
     @SuppressWarnings("unchecked")

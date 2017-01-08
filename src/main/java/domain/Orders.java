@@ -13,7 +13,8 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "order.all", query = "Select o from Orders o"),
         @NamedQuery(name = "order.byId", query = "Select o from Orders o where o.id = :id"),
-        @NamedQuery(name = "order.byWaffle", query = "Select o from Orders o INNER JOIN o.waffles w WHERE o.id = :id")
+        @NamedQuery(name = "order.byWaffle", query = "Select o from Orders o INNER JOIN o.waffles w WHERE w.id = :id"),
+        @NamedQuery(name = "order.allWaffles", query = "SELECT w FROM Orders o INNER JOIN o.waffles w WHERE o.id = :id")
 })
 public class Orders {
 	
@@ -58,7 +59,7 @@ public class Orders {
         this.sold = sold;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY/*, orphanRemoval = true*/)
     public List<Waffle> getWaffles() {
         return waffles;
     }
