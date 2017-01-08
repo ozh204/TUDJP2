@@ -12,6 +12,7 @@ public interface SellingManager {
     void deleteWaffle(Waffle waffle);
     void modifyWaffle(Waffle waffle);
     List<Waffle> getAllWaffles();
+    List<Waffle> getAllWaffles(Orders order);
     Waffle findWaffleById(Long id);
     
     void addOrder(Orders order);

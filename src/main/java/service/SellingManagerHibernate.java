@@ -31,11 +31,12 @@ public class SellingManagerHibernate implements SellingManager {
         waffle.setId(null);
         sessionFactory.getCurrentSession().persist(waffle);
 
-        double price = order.getPrice();
-        price += waffle.getPrice();
-        order.setPrice(price);
+        order.addWaffle(waffle);
+//        double price = order.getPrice();
+//        price += waffle.getPrice();
+//        order.setPrice(price);
 
-        order.getWaffles().add(waffle);
+        //order.getWaffles().add(waffle);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class SellingManagerHibernate implements SellingManager {
 
         // Ustawić nową cenę zamówienia, w którym został zmieniony gofr
         Orders order = (Orders) sessionFactory.getCurrentSession().getNamedQuery("order.byWaffle").setString("id", waffle.getId().toString()).uniqueResult();
-        List<Waffle> waffles = sessionFactory.getCurrentSession().getNamedQuery("order.allWaffles").setString("id", order.getId().toString()).list();
+        List<Waffle> waffles = getAllWaffles();
 
         double price = 0;
         for(Waffle waffle2 : waffles) {
@@ -80,6 +81,14 @@ public class SellingManagerHibernate implements SellingManager {
     public List<Waffle> getAllWaffles() {
 
         return sessionFactory.getCurrentSession().getNamedQuery("waffle.all").list();
+
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Waffle> getAllWaffles(Orders order) {
+
+        return sessionFactory.getCurrentSession().getNamedQuery("order.allWaffles").setString("id", order.getId().toString()).list();
 
     }
     

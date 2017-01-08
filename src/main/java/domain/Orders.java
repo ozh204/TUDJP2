@@ -66,4 +66,9 @@ public class Orders {
     public void setWaffles(List<Waffle> waffles) {
         this.waffles = waffles;
     }
+    public void addWaffle(Waffle waffle) {
+        this.waffles.add(waffle);
+
+        this.price += waffle.getPrice();
+    }
 }
