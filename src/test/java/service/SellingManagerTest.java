@@ -191,17 +191,17 @@ public class SellingManagerTest {
 
         Long id = addedOrderIds.get(0);
         Orders order = sellingManager.findOrderById(id);
-        //Integer howManyWaffles = sellingManager.getAllWaffles(order).size();
+        Integer howManyWaffles = sellingManager.getAllWaffles(order).size();
 
-        //assertEquals(howManyWaffles, 2, 0);
+        assertEquals(howManyWaffles, 1, 0);
 
         Waffle waffle = new Waffle();
         waffle.setCream("Tak");
         waffle.setFruit("Jagody");
         order.addWaffle(waffle);
 
-        //howManyWaffles = sellingManager.getAllWaffles(order).size();
-        //assertEquals(howManyWaffles, 2, 0);
+        howManyWaffles = sellingManager.getAllWaffles(order).size();
+        assertEquals(howManyWaffles, 2, 0);
 
     }
 
