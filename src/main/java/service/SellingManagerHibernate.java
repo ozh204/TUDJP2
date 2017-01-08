@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import domain.Waffle;
 import domain.Orders;
 
-@SuppressWarnings("ALL")
 @Component
 @Transactional
 public class SellingManagerHibernate implements SellingManager {
@@ -54,8 +53,12 @@ public class SellingManagerHibernate implements SellingManager {
 
         waffle = (Waffle) sessionFactory.getCurrentSession().get(Waffle.class, waffle.getId());
 
-        Orders order = (Orders) sessionFactory.getCurrentSession().getNamedQuery("order.byWaffle").setString("id", waffle.getId().toString()).uniqueResult();
-        order.getWaffles().remove(waffle);
+        //Orders order = (Orders) sessionFactory.getCurrentSession().getNamedQuery("order.byWaffle").setString("id", waffle.getId().toString()).uniqueResult();
+        //order = (Orders) sessionFactory.getCurrentSession().get(Orders.class, order.getId());
+
+        //System.out.println("###################"+order.getId()+"####################3");
+        //order.getWaffles().remove(waffle);
+        sessionFactory.getCurrentSession().delete(waffle);
         sessionFactory.getCurrentSession().saveOrUpdate(waffle);
     }
 
