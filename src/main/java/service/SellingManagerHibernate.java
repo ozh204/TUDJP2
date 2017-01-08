@@ -32,11 +32,6 @@ public class SellingManagerHibernate implements SellingManager {
         sessionFactory.getCurrentSession().persist(waffle);
 
         order.addWaffle(waffle);
-//        double price = order.getPrice();
-//        price += waffle.getPrice();
-//        order.setPrice(price);
-
-        //order.getWaffles().add(waffle);
     }
 
     @Override
@@ -52,19 +47,12 @@ public class SellingManagerHibernate implements SellingManager {
     @SuppressWarnings("unchecked")
     public void modifyWaffle(Waffle waffle) {
 
-        waffle = (Waffle) sessionFactory.getCurrentSession().get(Waffle.class, waffle.getId());
+        //waffle = (Waffle) sessionFactory.getCurrentSession().get(Waffle.class, waffle.getId());
         sessionFactory.getCurrentSession().update(waffle);
 
         // Ustawić nową cenę zamówienia, w którym został zmieniony gofr
         Orders order = (Orders) sessionFactory.getCurrentSession().getNamedQuery("order.byWaffle").setString("id", waffle.getId().toString()).uniqueResult();
-        List<Waffle> waffles = getAllWaffles();
-
-        double price = 0;
-        for(Waffle waffle2 : waffles) {
-            price += waffle2.getPrice();
-        }
-        order.setPrice(price);
-        sessionFactory.getCurrentSession().update(order);
+        order.updatePrice();
     }
 
 //    public void ktory(String co) {

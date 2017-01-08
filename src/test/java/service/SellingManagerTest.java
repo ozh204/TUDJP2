@@ -205,6 +205,20 @@ public class SellingManagerTest {
 
     }
 
+    @Test
+    public void deleteOrder() {
+
+        Integer howManyOrders = sellingManager.getAllOrders().size();
+        Long id = addedOrderIds.get(0);
+        Orders order = sellingManager.findOrderById(id);
+
+        sellingManager.deleteOrder(order);
+        addedOrderIds.remove(order.getId());
+
+        assertEquals(howManyOrders - 1, sellingManager.getAllOrders().size());
+        assertEquals(sellingManager.findOrderById(id), null);
+    }
+
     @After
     public void endTests() {
 

@@ -71,4 +71,12 @@ public class Orders {
 
         this.price += waffle.getPrice();
     }
+    public void updatePrice() {
+
+        setPrice(0);
+
+        for(Waffle waffle : this.waffles) {
+            this.price += waffle.getPrice();
+        }
+    }
 }
